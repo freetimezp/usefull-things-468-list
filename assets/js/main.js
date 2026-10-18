@@ -1,24 +1,11 @@
-/* =========================================
-   REGISTER GSAP PLUGINS
-========================================= */
-
 gsap.registerPlugin(SplitText, Flip);
-
-/* =========================================
-   CHECK REDUCED MOTION PREFERENCE
-========================================= */
 
 const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
 ).matches;
 
-/* =========================================
-   INITIALIZE ANIMATIONS
-========================================= */
-
+// initialize animation
 async function initLeaderboard() {
-    // Wait until the browser finishes loading fonts.
-    // This helps SplitText calculate the correct character positions.
     await document.fonts.ready;
 
     const panel = document.querySelector(".leaderboard");
@@ -30,7 +17,6 @@ async function initLeaderboard() {
     const tableHead = document.querySelector(".table-head");
     const bottomBar = document.querySelector(".leaderboard-bottom");
 
-    // Keep the page visible if animations are disabled.
     if (prefersReducedMotion) {
         gsap.set(
             [
@@ -51,18 +37,14 @@ async function initLeaderboard() {
         return;
     }
 
-    /* =====================================
-       SPLIT TITLE AND PLAYER NAMES
-    ===================================== */
-
-    // SplitText creates individual animated characters.
+    // split text
     const titleSplit = SplitText.create(title, {
         type: "chars",
         charsClass: "char",
         aria: "auto",
     });
 
-    // Create a separate SplitText instance for each player name.
+    // split player
     const playerSplits = rows.map((row) => {
         const name = row.querySelector(".player-name");
 
@@ -73,11 +55,8 @@ async function initLeaderboard() {
         });
     });
 
-    /* =====================================
-       PREPARE INITIAL STATES
-    ===================================== */
+    // state
 
-    // Hide the main interface before the timeline begins.
     gsap.set(panel, {
         autoAlpha: 0,
         y: 35,
@@ -117,17 +96,15 @@ async function initLeaderboard() {
         rotate: -20,
     });
 
-    // The panel itself is visible before its contents animate.
-    // This gives us a clean, coordinated entrance.
+    // timaline
+
     const timeline = gsap.timeline({
         defaults: {
             ease: "power3.out",
         },
     });
 
-    /* =====================================
-       STEP 1: PANEL
-    ===================================== */
+    // step 1 - panel
 
     timeline.to(panel, {
         autoAlpha: 1,
@@ -136,9 +113,7 @@ async function initLeaderboard() {
         duration: 0.8,
     });
 
-    /* =====================================
-       STEP 2: TOP STATUS
-    ===================================== */
+    // step 2 - top status
 
     timeline.to(
         topBar,
@@ -150,9 +125,7 @@ async function initLeaderboard() {
         "-=0.4",
     );
 
-    /* =====================================
-       STEP 3: TITLE
-    ===================================== */
+    // step 3 - title
 
     timeline.to(
         headingKicker,
@@ -187,9 +160,7 @@ async function initLeaderboard() {
         "-=0.3",
     );
 
-    /* =====================================
-       STEP 4: COLUMN LABELS
-    ===================================== */
+    // step 4 - labels
 
     timeline.to(
         tableHead,
@@ -201,12 +172,8 @@ async function initLeaderboard() {
         "-=0.15",
     );
 
-    /* =====================================
-       STEP 5: PLAYER ROWS
-    ===================================== */
+    // step 5 - rows
 
-    // Each row enters a little later than the previous one.
-    // The overlapping timing keeps the animation fluid.
     timeline.to(
         rows,
         {
@@ -219,11 +186,8 @@ async function initLeaderboard() {
         "-=0.05",
     );
 
-    /* =====================================
-       STEP 6: PLAYER NAME REVEALS
-    ===================================== */
+    // step 6 - players names
 
-    // Animate the letters in each row after the rows arrive.
     playerSplits.forEach((split, index) => {
         timeline.fromTo(
             split.chars,
@@ -240,44 +204,37 @@ async function initLeaderboard() {
                 stagger: 0.018,
                 ease: "power2.out",
             },
-            1.45 + index * 0.09,
+            2.45 + index * 0.15,
         );
     });
 
-    /* =====================================
-       STEP 7: AVATARS
-    ===================================== */
-
+    // step 7 - avatars
     timeline.to(
         ".avatar",
         {
             scale: 1,
             rotate: 0,
             duration: 0.45,
-            stagger: 0.07,
+            stagger: 0.11,
             ease: "back.out(2)",
         },
-        1.4,
+        2.4,
     );
 
-    /* =====================================
-       STEP 8: WIN RATE BARS
-    ===================================== */
+    // step 8 - win rates
 
     timeline.to(
         ".rate-track span",
         {
             scaleX: 1,
             duration: 0.8,
-            stagger: 0.08,
+            stagger: 0.11,
             ease: "power2.out",
         },
-        1.7,
+        2.7,
     );
 
-    /* =====================================
-       STEP 9: ACHIEVEMENT ICONS
-    ===================================== */
+    // step 9 - achievement
 
     timeline.to(
         ".achievement",
@@ -286,15 +243,13 @@ async function initLeaderboard() {
             scale: 1,
             rotate: 0,
             duration: 0.45,
-            stagger: 0.07,
+            stagger: 0.11,
             ease: "back.out(2)",
         },
-        1.65,
+        2.65,
     );
 
-    /* =====================================
-       STEP 10: BOTTOM STATUS
-    ===================================== */
+    // step 10 - bottom status
 
     timeline.to(
         bottomBar,
@@ -306,15 +261,12 @@ async function initLeaderboard() {
         "-=0.2",
     );
 
-    /* =====================================
-       HOVER EFFECTS
-    ===================================== */
+    // hover effect
 
     rows.forEach((row) => {
         const avatar = row.querySelector(".avatar");
         const achievement = row.querySelector(".achievement");
 
-        // Use GSAP for a smooth lift when the pointer enters.
         row.addEventListener("mouseenter", () => {
             gsap.to(row, {
                 y: -2,
@@ -337,7 +289,6 @@ async function initLeaderboard() {
             });
         });
 
-        // Return everything to its original position.
         row.addEventListener("mouseleave", () => {
             gsap.to(row, {
                 y: 0,
@@ -361,15 +312,12 @@ async function initLeaderboard() {
         });
     });
 
-    /* =====================================
-       DYNAMIC RANK ANIMATION WITH FLIP
-    ===================================== */
+    // rank flip
 
     const boostButton = document.querySelector("#boost-player");
     const resetButton = document.querySelector("#reset-ranks");
     const playerList = document.querySelector(".player-list");
 
-    // Remember the original XP scores so RESET restores the leaderboard.
     const initialScores = new Map(
         rows.map((row) => [
             row,
@@ -379,30 +327,23 @@ async function initLeaderboard() {
         ]),
     );
 
-    // Format XP values consistently, including thousands separators.
     const formatXP = (value) => value.toLocaleString("en-US");
 
-    // Keep track of the last highlighted player.
     let highlightedRow = null;
     let rankAnimationRunning = false;
-
-    /* =====================================
-       UPDATE RANKS AND MEDALS
-    ===================================== */
 
     function updateRankDetails() {
         const currentRows = [...playerList.children];
 
         currentRows.forEach((row, index) => {
             const rank = index + 1;
+
             const rankElement = row.querySelector(".rank");
             const achievement = row.querySelector(".achievement");
             const achievementIcon = achievement.querySelector("i");
 
-            // Update the visible rank number.
             rankElement.textContent = String(rank).padStart(2, "0");
 
-            // Remove old ranking classes before assigning new ones.
             row.classList.remove("rank-one", "rank-two", "rank-three");
 
             rankElement.classList.remove(
@@ -417,21 +358,25 @@ async function initLeaderboard() {
                 "achievement-bronze",
             );
 
-            // The top three positions receive special styling and medals.
+            // check top three position
+
             if (rank === 1) {
                 row.classList.add("rank-one");
+
                 rankElement.classList.add("rank-gold");
                 achievement.classList.add("achievement-gold");
 
                 achievementIcon.className = "fa-solid fa-crown";
             } else if (rank === 2) {
                 row.classList.add("rank-two");
+
                 rankElement.classList.add("rank-silver");
                 achievement.classList.add("achievement-silver");
 
                 achievementIcon.className = "fa-solid fa-medal";
             } else if (rank === 3) {
                 row.classList.add("rank-three");
+
                 rankElement.classList.add("rank-bronze");
                 achievement.classList.add("achievement-bronze");
 
@@ -442,27 +387,25 @@ async function initLeaderboard() {
         });
     }
 
-    /* =====================================
-       ANIMATE A LEADERBOARD UPDATE
-    ===================================== */
+    // leaderboard update
 
     function animateRanking(scoreUpdater) {
-        // Prevent another click from interrupting an active rank animation.
         if (rankAnimationRunning) return;
 
         rankAnimationRunning = true;
+
+        // console.log("we here");
+
         boostButton.disabled = true;
         resetButton.disabled = true;
 
         const previousOrder = [...playerList.children];
 
-        // FLIP captures the current positions before the DOM changes.
+        // grab current positions before changes
         const state = Flip.getState(previousOrder);
 
-        // Apply score changes before sorting the list.
         scoreUpdater();
 
-        // Sort players by XP, highest score first.
         const sortedRows = [...previousOrder].sort((a, b) => {
             const scoreA = Number(
                 a.querySelector(".xp-value").textContent.replace(/,/g, ""),
@@ -475,21 +418,20 @@ async function initLeaderboard() {
             return scoreB - scoreA;
         });
 
-        // Move the existing row elements into their new positions.
-        // This preserves their contents and event listeners.
         sortedRows.forEach((row) => {
             playerList.appendChild(row);
         });
 
-        // Update ranks and medals after reordering the rows.
         updateRankDetails();
 
-        // Find which players changed position.
+        // find player changed position
+
         const movedRows = sortedRows.filter(
             (row, index) => previousOrder[index] !== row,
         );
 
-        // FLIP animates from the captured positions to the new positions.
+        // Flip to new position
+
         Flip.from(state, {
             duration: 0.9,
             ease: "power3.inOut",
@@ -503,19 +445,17 @@ async function initLeaderboard() {
                 boostButton.disabled = false;
                 resetButton.disabled = false;
 
-                // Clear the previous highlight.
                 if (highlightedRow) {
                     highlightedRow.classList.remove("rank-changed");
                 }
 
-                // Highlight the players who moved.
                 movedRows.forEach((row) => {
                     row.classList.add("rank-changed");
                 });
 
                 highlightedRow = movedRows[0] || null;
 
-                // Fade the highlights away after the movement finishes.
+                // remove class after change position and highlight
                 gsap.delayedCall(1.3, () => {
                     movedRows.forEach((row) => {
                         row.classList.remove("rank-changed");
@@ -527,35 +467,30 @@ async function initLeaderboard() {
         });
     }
 
-    /* =====================================
-       BOOST A RANDOM PLAYER
-    ===================================== */
+    // boost
 
     boostButton.addEventListener("click", () => {
         animateRanking(() => {
             const currentRows = [...playerList.children];
 
-            // Choose a player outside the first position.
             const candidates = currentRows.slice(1);
 
+            // random player
             const randomIndex = Math.floor(Math.random() * candidates.length);
-
             const chosenPlayer = candidates[randomIndex];
 
             const xpElement = chosenPlayer.querySelector(".xp-value");
 
             const currentXP = Number(xpElement.textContent.replace(/,/g, ""));
 
-            // Add enough XP to make a noticeable move up the rankings.
+            // random bonus
             const bonusXP = Math.floor(5000 + Math.random() * 8000);
 
             xpElement.textContent = formatXP(currentXP + bonusXP);
         });
     });
 
-    /* =====================================
-       RESET TO THE ORIGINAL RANKINGS
-    ===================================== */
+    // reset
 
     resetButton.addEventListener("click", () => {
         animateRanking(() => {
@@ -568,9 +503,5 @@ async function initLeaderboard() {
         });
     });
 }
-
-/* =========================================
-   START THE EXPERIENCE
-========================================= */
 
 initLeaderboard();

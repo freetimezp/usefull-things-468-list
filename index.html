@@ -8,31 +8,29 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@300..700&display=swap"
             rel="stylesheet"
         />
 
         <link
             rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css"
         />
 
         <link rel="stylesheet" href="./assets/css/style.css" />
-
         <title>NEON ARENA — Leaderboard</title>
     </head>
 
     <body>
-        <!-- Ambient background decorations -->
         <div class="ambient ambient--one"></div>
         <div class="ambient ambient--two"></div>
         <div class="ambient ambient--three"></div>
+
         <div class="background-grid"></div>
         <div class="noise"></div>
 
         <main class="arena">
             <section class="leaderboard">
-                <!-- Compact title area -->
                 <div class="leaderboard-top">
                     <div class="season-label">
                         <span class="live-dot"></span>
@@ -55,7 +53,6 @@
                     <p class="subtitle">Only the relentless make the top.</p>
                 </div>
 
-                <!-- Ranking column labels -->
                 <div class="table-head">
                     <span>RANK</span>
                     <span>PLAYER</span>
@@ -63,7 +60,6 @@
                     <span>EXPERIENCE</span>
                 </div>
 
-                <!-- Player list -->
                 <ul class="player-list">
                     <li class="player-row rank-one" data-rank="1">
                         <span class="rank rank-gold">01</span>
@@ -320,30 +316,25 @@
                         BOOST RANDOM PLAYER
                     </button>
 
-                    <button
-                        class="reset-button"
-                        id="reset-ranks"
-                        aria-label="Reset leaderboard"
-                    >
+                    <button class="reset-button" id="reset-ranks">
                         <i class="fa-solid fa-rotate-left"></i>
                         RESET
                     </button>
                 </div>
 
                 <div class="leaderboard-bottom">
-                    <span
-                        ><span class="bottom-dot"></span> RANKINGS UPDATED
-                        LIVE</span
-                    >
+                    <span>
+                        <span class="bottom-dot"></span> RANKINGS UPDATED LIVE
+                    </span>
+
                     <span>TOP 08 <i class="fa-solid fa-arrow-up"></i></span>
                 </div>
             </section>
         </main>
 
-        <!-- GSAP core and SplitText plugin -->
-        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/SplitText.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/Flip.min.js"></script>
 
         <script src="./assets/js/main.js"></script>
     </body>
